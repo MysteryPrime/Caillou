@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>LE CAILLOU ABSOLU — 100 000 €</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #050509;
+    --bg-soft: #0b0b12;
+    --accent: #f5d38b;
+    --accent-soft: #f8e3b8;
+    --accent-strong: #f0b45b;
+    --text: #f5f5f5;
+    --muted: #a7a7b8;
+    --border: rgba(255,255,255,0.12);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+      "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top, #151520 0, #050509 55%, #000 100%);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* Fond */
+  .bg-gradient {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 0%, rgba(245,211,139,0.18), transparent 60%),
+      radial-gradient(circle at 80% 100%, rgba(180,140,255,0.18), transparent 60%);
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: -2;
+  }
+
+  .bg-noise {
+    position: fixed;
+    inset: -40px;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
+    mix-blend-mode: soft-light;
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .page {
+    max-width: 1200px;
+    margin: 40px auto 80px;
+    padding: 0 20px;
+  }
+
+  /* HEADER / HERO */
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 60px;
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      grid-template-columns: 1fr;
+      margin-top: 20px;
+    }
+  }
+
+  .hero-left-label {
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .hero-title {
+    font-size: clamp(32px, 4vw, 46px);
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin-bottom: 16px;
+  }
+
+  .hero-title span.main {
+    display: block;
+    background: linear-gradient(120deg, #ffffff, var(--accent-soft), #f0b45b);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .hero-title span.sub {
+    display: block;
+    font-size: 0.7em;
+    color: var(--muted);
+    letter-spacing: 0.32em;
+    margin-top: 8px;
+  }
+
+  .hero-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #e3e3f0;
+    max-width: 520px;
+    margin-bottom: 22px;
+  }
+
+  .hero-text strong {
+    color: var(--accent-soft);
+    font-weight: 600;
+  }
+
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 26px;
+  }
+
+  .tag {
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.18);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: rgba(5,5,12,0.8);
+  }
+
+  .tag.gold {
+    border-color: rgba(245,211,139,0.6);
+    color: var(--accent-soft);
+    background: radial-gradient(circle at top, rgba(245,211,139,0.25), rgba(5,5,12,0.9));
+  }
+
+  .hero-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .btn {
+    position: relative;
+    padding: 12px 24px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .btn-primary {
+    background: linear-gradient(120deg, #f5d38b, #ffffff, #f0b45b);
+    color: #1a1308;
+    box-shadow:
+      0 0 18px rgba(245,211,139,0.8),
+      0 0 40px rgba(0,0,0,0.9);
+  }
+
+  .btn-primary::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(255,255,255,0.7), transparent, rgba(255,255,255,0.7));
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
+  .btn-primary:hover::before {
+    animation: shine 0.7s ease-out;
+    opacity: 1;
+  }
+
+  @keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .btn-secondary {
+    background: rgba(5,5,12,0.9);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--muted);
+  }
+
+  .hero-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .hero-note strong {
+    color: var(--accent-soft);
+  }
+
+  /* HERO RIGHT : SCÈNE DU CAILLOU */
+  .hero-right {
+    position: relative;
+  }
+
+  .pedestal {
+    position: relative;
+    border-radius: 26px;
+    background: radial-gradient(circle at top, rgba(245,211,139,0.18), rgba(5,5,12,0.96));
+    border: 1px solid rgba(255,255,255,0.16);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06),
+      0 40px 80px rgba(0,0,0,0.9);
+    padding: 26px 26px 30px;
+    overflow: hidden;
+  }
+
+  .pedestal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .pedestal-header span.right {
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(5,5,12,0.9);
+  }
+
+  .pedestal-inner {
+    position: relative;
+    border-radius: 20px;
+    background: radial-gradient(circle at 50% 0, rgba(245,211,139,0.25), rgba(5,5,12,1));
+    border: 1px solid rgba(255,255,255,0.12);
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .halo {
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,211,139,0.7), transparent 70%);
+    filter: blur(10px);
+    animation: haloPulse 5s ease-in-out infinite;
+  }
+
+  @keyframes haloPulse {
+    0%,100% { transform: scale(0.9); opacity: 0.7; }
+    50% { transform: scale(1.05); opacity: 1; }
+  }
+
+  .ring {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 1px solid rgba(245,211,139,0.4);
+    box-shadow: 0 0 18px rgba(245,211,139,0.6);
+    transform: rotateX(70deg);
+    opacity: 0.8;
+  }
+
+  .ring::before,
+  .ring::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 16px rgba(245,211,139,0.9);
+  }
+
+  .ring::before {
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .ring::after {
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .caillou-orbit {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-style: preserve-3d;
+    animation: orbit 18s linear infinite;
+  }
+
+  @keyframes orbit {
+    0% { transform: rotateX(18deg) rotateY(0deg); }
+    100% { transform: rotateX(18deg) rotateY(360deg); }
+  }
+
+  .caillou-img {
+    width: 200px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow:
+      0 0 40px rgba(255,255,255,0.9),
+      0 0 80px rgba(245,211,139,0.7),
+      0 0 120px rgba(0,0,0,0.9);
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,100% { transform: translateY(0) rotateZ(-3deg); }
+    50% { transform: translateY(-16px) rotateZ(3deg); }
+  }
+
+  .pedestal-footer {
+    margin-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .pedestal-footer span strong {
+    color: var(--accent-soft);
+  }
+
+  /* SECTION HISTOIRE / DÉSIR */
+  .section {
+    margin-bottom: 60px;
+  }
+
+  .section-title {
+    font-size: 13px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .section-content {
+    border-radius: 22px;
+    background: rgba(5,5,12,0.9);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 24px 24px 22px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.8);
+  }
+
+  .section-text {
+    font-size: 14px;
+    line-height: 1.9;
+    color: #e4e4f2;
+  }
+
+  .section-text strong {
+    color: var(--accent-soft);
+    font-weight: 600;
+  }
+
+  .section-text p + p {
+    margin-top: 12px;
+  }
+
+  .section-highlight {
+    margin-top: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px dashed rgba(245,211,139,0.6);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-soft);
+  }
+
+  /* SECTION PRIX / ÉVIDENCE */
+  .price-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 26px;
+  }
+
+  @media (max-width: 900px) {
+    .price-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .price-main {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .price-main span.currency {
+    font-size: 16px;
+    color: var(--muted);
+  }
+
+  .price-sub {
+    font-size: 13px;
+    color: var(--muted);
+    max-width: 360px;
+  }
+
+  .price-sub strong {
+    color: var(--accent-soft);
+  }
+
+  .price-list {
+    font-size: 13px;
+    color: #e4e4f2;
+    line-height: 1.8;
+  }
+
+  .price-list ul {
+    list-style: none;
+    margin-top: 10px;
+  }
+
+  .price-list li {
+    margin-bottom: 6px;
+  }
+
+  .price-list li::before {
+    content: "— ";
+    color: var(--accent-soft);
+  }
+
+  /* SECTION CERTIFICAT / RARETÉ */
+  .cert-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 26px;
+  }
+
+  @media (max-width: 900px) {
+    .cert-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cert-card {
+    border-radius: 18px;
+    background: radial-gradient(circle at top, rgba(245,211,139,0.18), rgba(5,5,12,0.96));
+    border: 1px solid rgba(255,255,255,0.16);
+    padding: 18px 18px 16px;
+    font-size: 12px;
+    color: #e4e4f2;
+  }
+
+  .cert-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .cert-card-body p + p {
+    margin-top: 8px;
+  }
+
+  .cert-code {
+    margin-top: 10px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: rgba(5,5,12,0.9);
+    border: 1px solid rgba(255,255,255,0.18);
+    font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    font-size: 11px;
+    color: var(--accent-soft);
+  }
+
+  .scarcity {
+    font-size: 13px;
+    color: #e4e4f2;
+    line-height: 1.8;
+  }
+
+  .scarcity strong {
+    color: var(--accent-soft);
+  }
+
+  .scarcity-note {
+    margin-top: 10px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* SECTION FINAL CTA */
+  .final-cta {
+    margin-top: 40px;
+    text-align: center;
+  }
+
+  .final-cta-title {
+    font-size: 18px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .final-cta-text {
+    font-size: 13px;
+    color: #e4e4f2;
+    max-width: 520px;
+    margin: 0 auto 18px;
+    line-height: 1.8;
+  }
+
+  .final-cta-text strong {
+    color: var(--accent-soft);
+  }
+
+  .final-cta-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  .final-cta-note strong {
+    color: var(--accent-soft);
+  }
+
+  /* MODALS */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+
+  .modal-box {
+    background: rgba(5,5,12,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 26px;
+    border-radius: 18px;
+    width: min(90%, 420px);
+    text-align: center;
+    box-shadow: 0 0 40px rgba(245,211,139,0.4);
+  }
+
+  .modal-box h2 {
+    font-size: 16px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .modal-box p {
+    font-size: 13px;
+    color: #e4e4f2;
+    margin-bottom: 6px;
+  }
+
+  .modal-box p strong {
+    color: var(--accent-soft);
+  }
+
+  .input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.05);
+    color: white;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="bg-gradient"></div>
+<div class="bg-noise"></div>
+
+<div class="page">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-left-label">COLLECTION PRIVÉE — ŒUVRE UNIQUE</div>
+      <h1 class="hero-title">
+        <span class="main">LE CAILLOU ABSOLU</span>
+        <span class="sub">FRAGMENT D’ÉTERNITÉ — 1/1</span>
+      </h1>
+      <p class="hero-text">
+        Une pierre, choisie parmi des milliards, élevée au rang
+        d’<strong>icône absolue</strong>.  
+        Ce caillou n’est pas décoratif&nbsp;: il est la preuve tangible
+        que la valeur peut être <strong>créée</strong>, assumée, incarnée
+        dans un fragment de matière brute.
+      </p>
+
+      <div class="hero-tags">
+        <span class="tag gold">Pièce unique</span>
+        <span class="tag">Art conceptuel</span>
+        <span class="tag">Performance économique</span>
+        <span class="tag">Objet de collection</span>
+      </div>
+
+      <div class="hero-cta-row">
+        <button class="btn btn-primary" onclick="openPaiement()">Acquérir le Caillou</button>
+        <button class="btn btn-secondary" onclick="openCertificat()">Voir le certificat d’authenticité</button>
+      </div>
+      <div class="hero-note">
+        <strong>100&nbsp;000&nbsp;€</strong> — Un prix assumé, pensé comme un geste.
+        Pas une hésitation.
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="pedestal">
+        <div class="pedestal-header">
+          <span>VITRINE PRINCIPALE</span>
+          <span class="right">LOT&nbsp;: CAILLOU-0001 / 1&nbsp;SUR&nbsp;1</span>
+        </div>
+        <div class="pedestal-inner">
+          <div class="halo"></div>
+          <div class="caillou-orbit">
+            <div class="ring"></div>
+            <!-- Mets ta vraie image ici -->
+            <img src="images/caillou.jpg" alt="Caillou Absolu" class="caillou-img">
+          </div>
+        </div>
+        <div class="pedestal-footer">
+          <span>MATÉRIAU&nbsp;: <strong>ROCHE NATURELLE</strong></span>
+          <span>STATUT&nbsp;: <strong>RÉSERVÉ AUX AUDACIEUX</strong></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTOIRE / DÉSIR -->
+  <section class="section">
+    <div class="section-title">POURQUOI CE CAILLOU EST EXCEPTIONNEL</div>
+    <div class="section-content">
+      <div class="section-text">
+        <p>
+          Ce caillou n’a pas été trouvé par hasard. Il a été
+          <strong>sélectionné</strong>, isolé, observé, jusqu’à ce qu’il
+          s’impose comme une évidence&nbsp;: une forme parfaitement imparfaite,
+          un équilibre entre brutalité et douceur, entre masse et silence.
+        </p>
+        <p>
+          Il ne brille pas comme un diamant, il ne reflète pas la lumière
+          comme un métal précieux. Il fait mieux&nbsp;: il
+          <strong>résiste</strong>.  
+          Il impose sa présence, calme, dense, inébranlable. Il est ce que
+          le monde a produit de plus simple, et ce que vous choisissez de
+          considérer comme <strong>infiniment précieux</strong>.
+        </p>
+        <p>
+          En l’acquérant, vous ne payez pas une décoration. Vous signez un
+          geste. Vous affirmez que votre regard a le pouvoir de transformer
+          un fragment de trottoir en <strong>mythe personnel</strong>.
+        </p>
+      </div>
+      <div class="section-highlight">
+        CE N’EST PAS UN OBJET À POSER.  
+        C’EST UNE DÉCISION À ASSUMER.
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIX / ÉVIDENCE -->
+  <section class="section">
+    <div class="section-title">LE PRIX COMME PARTIE INTÉGRANTE DE L’ŒUVRE</div>
+    <div class="section-content">
+      <div class="price-grid">
+        <div>
+          <div class="price-main">
+            <span>100&nbsp;000</span>
+            <span class="currency">&nbsp;EUROS</span>
+          </div>
+          <p class="price-sub">
+            Ce montant n’est pas une exagération.  
+            Il est <strong>le cœur du dispositif</strong>.  
+            Payer 100&nbsp;000&nbsp;€ pour ce caillou, c’est affirmer que
+            votre liberté de valeur dépasse les habitudes, les normes et
+            les réflexes rationnels.
+          </p>
+        </div>
+        <div class="price-list">
+          <p>En réalité, vous achetez&nbsp;:</p>
+          <ul>
+            <li><strong>Une histoire</strong> que personne d’autre ne pourra raconter.</li>
+            <li><strong>Un symbole</strong> de votre capacité à décider seul de ce qui compte.</li>
+            <li><strong>Une pièce unique</strong>, impossible à reproduire, impossible à copier.</li>
+            <li><strong>Un geste</strong> dont on se souviendra plus que de n’importe quel tableau.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICAT / RARETÉ -->
+  <section class="section">
+    <div class="section-title">CERTIFICAT, RARETÉ ET TRAÇABILITÉ</div>
+    <div class="section-content">
+      <div class="cert-grid">
+        <div class="cert-card">
+          <div class="cert-card-header">
+            <span>CERTIFICAT D’AUTHENTICITÉ</span>
+            <span>ARCHIVE PRIVÉE</span>
+          </div>
+          <div class="cert-card-body">
+            <p>
+              Le caillou est livré avec un certificat signé, daté, décrivant
+              précisément son origine, son contexte de sélection et son statut
+              d’<strong>œuvre unique</strong>.
+            </p>
+            <p>
+              Ce document atteste que vous êtes le seul propriétaire officiel
+              du <strong>Caillou Absolu</strong>, et que sa valeur de
+              100&nbsp;000&nbsp;€ fait partie intégrante de l’œuvre.
+            </p>
+            <div class="cert-code">
+              ID&nbsp;: CAILLOU-0001-ABSOLU<br>
+              STATUT&nbsp;: PIÈCE UNIQUE / NON REPRODUCTIBLE<br>
+              VALEUR CONCEPTUELLE&nbsp;: 100000 EUR<br>
+              PROPRIÉTAIRE&nbsp;: &lt;VOTRE NOM ICI&gt;
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="scarcity">
+            <p>
+              Il n’existe qu’un seul <strong>Caillou Absolu</strong>.  
+              Pas de série, pas de variation, pas de version “plus petite”
+              ou “plus accessible”.
+            </p>
+            <p>
+              Vous ne partagez pas cette œuvre. Vous ne la “possédez pas
+              un peu”. Vous la possédez <strong>entièrement</strong>, ou
+              vous ne la possédez pas.
+            </p>
+          </div>
+          <div class="scarcity-note">
+            DISPONIBILITÉ&nbsp;: 1/1 — APRÈS ACQUISITION, L’ŒUVRE SORT DU MARCHÉ.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta">
+    <div class="final-cta-title">PRENDRE LA DÉCISION</div>
+    <p class="final-cta-text">
+      Il y a des achats qu’on oublie, et des décisions qui nous suivent toute une vie.  
+      Acquérir le <strong>Caillou Absolu</strong>, c’est accepter que votre regard
+      transforme un fragment de roche en <strong>repère intime</strong>, en
+      <strong>histoire fondatrice</strong>, en <strong>preuve silencieuse</strong>
+      de votre liberté.
+    </p>
+    <button class="btn btn-primary" onclick="openPaiement()">Je choisis le Caillou Absolu</button>
+    <div class="final-cta-note">
+      <strong>Si vous hésitez encore, c’est que l’œuvre a déjà commencé à agir.</strong>
+    </div>
+  </section>
+</div>
+
+<!-- MODAL CERTIFICAT -->
+<div id="modalCertificat" class="modal-overlay">
+  <div class="modal-box">
+    <h2>Certificat d’Authenticité</h2>
+    <p>Ce document atteste que vous êtes le propriétaire officiel du <strong>Caillou Absolu</strong>.</p>
+    <p>ID : CAILLOU-0001-ABSOLU</p>
+    <p>Statut : Pièce unique</p>
+    <p>Valeur conceptuelle : 100 000 €</p>
+    <button class="btn btn-secondary" onclick="closeCertificat()">Fermer</button>
+  </div>
+</div>
+
+<!-- MODAL PAIEMENT -->
+<div id="modalPaiement" class="modal-overlay">
+  <div class="modal-box">
+    <h2>Paiement sécurisé</h2>
+    <p>Montant : <strong>100 000 €</strong></p>
+    <p>Mode de paiement : <em>Simulation artistique</em></p>
+
+    <input type="text" placeholder="Nom complet" class="input">
+    <input type="text" placeholder="Numéro de carte (factice)" class="input">
+    <input type="text" placeholder="Date d’expiration" class="input">
+    <input type="text" placeholder="Cryptogramme" class="input">
+
+    <button class="btn btn-primary" onclick="closePaiement()">Valider</button>
+    <button class="btn btn-secondary" onclick="closePaiement()">Annuler</button>
+  </div>
+</div>
+
+<script>
+function openCertificat() {
+  document.getElementById("modalCertificat").style.display = "flex";
+}
+function closeCertificat() {
+  document.getElementById("modalCertificat").style.display = "none";
+}
+function openPaiement() {
+  document.getElementById("modalPaiement").style.display = "flex";
+}
+function closePaiement() {
+  document.getElementById("modalPaiement").style.display = "none";
+}
+</script>
+</body>
+</html>
